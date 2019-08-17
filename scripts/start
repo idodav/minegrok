@@ -1,0 +1,19 @@
+#!/bin/bash
+# -----------------------------------------------------------------------------
+# docker-minecraft /start script
+# -----------------------------------------------------------------------------
+
+if [ ! -f /data/minecraft_server.jar ]
+then
+    curl "https://launcher.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar" -o /data/minecraft_server.jar
+fi
+
+if [ ! -f /data/eula.txt ]
+then
+    echo "eula=true" > /data/eula.txt
+fi
+
+ngrok authtoken $ngrok_token
+ngrok tcp 25565 > /dev/null &
+
+cd /data/; java -Xmx2G -jar minecraft_server.jar nogui
